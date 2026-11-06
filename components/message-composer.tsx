@@ -12,7 +12,7 @@ export function MessageComposer({ listingId, listingName, signedIn }: { listingI
   async function submit(event: React.FormEvent) {
     event.preventDefault();
     if (!signedIn) {
-      window.location.href = `/signin-with-chatgpt?return_to=${encodeURIComponent(window.location.pathname)}`;
+      window.location.href = `/login?return_to=${encodeURIComponent(window.location.pathname)}`;
       return;
     }
     setSending(true);

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowDown, ArrowRight, BadgeCheck, HeartHandshake, MapPinned, MessageCircleMore, ShieldCheck } from "lucide-react";
-import { getChatGPTUser } from "@/app/chatgpt-auth";
+import { getCurrentUser } from "@/lib/auth";
 import { ResourceExplorer } from "@/components/resource-explorer";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -9,7 +9,7 @@ import { getAllResources } from "@/lib/resources-server";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const user = await getChatGPTUser();
+  const user = await getCurrentUser();
   const resources = await getAllResources();
   return (
     <main>

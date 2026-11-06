@@ -30,7 +30,7 @@ export function ResourceExplorer({ items, signedIn }: { items: Resource[]; signe
 
   async function toggleFavorite(id: string) {
     if (!signedIn) {
-      window.location.href = "/signin-with-chatgpt?return_to=%2F%23directory";
+      window.location.href = "/login?return_to=%2F%23directory";
       return;
     }
     const isFavorite = favorites.has(id);

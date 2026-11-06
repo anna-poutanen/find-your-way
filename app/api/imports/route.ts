@@ -1,5 +1,5 @@
 import { env } from "cloudflare:workers";
-import { getChatGPTUser } from "@/app/chatgpt-auth";
+import { getCurrentUser, isSameOrigin } from "@/lib/auth";
 import { getDb } from "@/db";
 import { importJobs } from "@/db/schema";
 import { requireAdminProfile } from "@/lib/profile";
@@ -20,7 +20,8 @@ function parseCsv(text: string) {
 }
 
 export async function POST(request: Request) {
-  const user = await getChatGPTUser(); if (!user) return Response.json({ error: "Sign in required" }, { status: 401 });
+  if (!isSameOrigin(request)) return Response.json({ error: "Invalid request origin." }, { status: 403 });
+  const user = await getCurrentUser(); if (!user) return Response.json({ error: "Sign in required" }, { status: 401 });
   try { await requireAdminProfile(user); } catch { return Response.json({ error: "Admin access required" }, { status: 403 }); }
   const form = await request.formData(); const file = form.get("file");
   if (!(file instanceof File)) return Response.json({ error: "Choose a file to upload." }, { status: 400 });

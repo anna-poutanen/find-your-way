@@ -1,11 +1,12 @@
 import { eq } from "drizzle-orm";
-import { getChatGPTUser } from "@/app/chatgpt-auth";
+import { getCurrentUser, isSameOrigin } from "@/lib/auth";
 import { getDb } from "@/db";
 import { listingRevisions, organizationMembers, organizations, profiles } from "@/db/schema";
 import { ensureProfile } from "@/lib/profile";
 
 export async function POST(request: Request) {
-  const user = await getChatGPTUser(); if (!user) return Response.json({ error: "Sign in required" }, { status: 401 });
+  if (!isSameOrigin(request)) return Response.json({ error: "Invalid request origin." }, { status: 403 });
+  const user = await getCurrentUser(); if (!user) return Response.json({ error: "Sign in required" }, { status: 401 });
   const payload = await request.json() as Record<string, string>;
   for (const field of ["name", "category", "city", "email", "summary", "details"]) if (!payload[field]?.trim()) return Response.json({ error: `Please complete ${field}.` }, { status: 400 });
   await ensureProfile(user); const db = getDb(); const organizationId = crypto.randomUUID();

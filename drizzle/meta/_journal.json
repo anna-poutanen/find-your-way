@@ -8,6 +8,13 @@
       "when": 1793982912129,
       "tag": "0000_volatile_pandemic",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1793987744817,
+      "tag": "0001_smooth_morlocks",
+      "breakpoints": true
     }
   ]
 }

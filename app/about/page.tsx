@@ -1,5 +1,17 @@
-import { getChatGPTUser } from "@/app/chatgpt-auth";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { getCurrentUser } from "@/lib/auth";
+
 export const dynamic = "force-dynamic";
-export default async function AboutPage() { const user = await getChatGPTUser(); return <main><SiteHeader user={user} /><section className="page-hero"><div className="shell narrow"><span className="eyebrow">About the project</span><h1>Built for youth, with dignity at the centre.</h1><p>Find Your Way is a Hearts Against Homelessness initiative designed to make housing and support information easier to understand, verify and act on.</p></div></section><section className="section-space"><div className="shell narrow article-copy"><h2>Why this directory exists</h2><p>Finding help is often harder than it should be. Information is scattered, eligibility rules are unclear and program details change. This directory brings those starting points together while keeping organizations involved in maintaining their own information.</p><h2>How information is handled</h2><p>New listings and updates enter an administrative review queue. Public records include a last-reviewed date, and people can report changes. The directory is a starting point—not a guarantee of availability.</p><h2>Messaging with privacy</h2><p>People can choose to remain anonymous when contacting an organization. The platform can relay messages without revealing the user’s personal email address.</p></div></section><SiteFooter /></main>; }
+
+export default async function AboutPage() {
+  const user = await getCurrentUser();
+  return (
+    <main>
+      <SiteHeader user={user} />
+      <section className="page-hero"><div className="shell narrow"><span className="eyebrow">About the project</span><h1>Built for youth, with dignity at the centre.</h1><p>Find Your Way is a Hearts Against Homelessness initiative designed to make housing and support information easier to understand, verify and act on.</p></div></section>
+      <section className="section-space"><div className="shell narrow article-copy"><h2>Why this directory exists</h2><p>Finding help is often harder than it should be. Information is scattered, eligibility rules are unclear and program details change. This directory brings those starting points together while keeping organizations involved in maintaining their own information.</p><h2>How information is handled</h2><p>New listings and updates enter an administrative review queue. Public records include a last-reviewed date, and people can report changes. The directory is a starting point—not a guarantee of availability.</p><h2>Messaging with privacy</h2><p>People can choose to remain anonymous when contacting an organization. The platform can relay messages without revealing the user’s personal email address.</p></div></section>
+      <SiteFooter />
+    </main>
+  );
+}

@@ -1,9 +1,8 @@
 import Link from "next/link";
 import { Compass, UserRound } from "lucide-react";
-import type { ChatGPTUser } from "@/app/chatgpt-auth";
-import { chatGPTSignInPath } from "@/app/chatgpt-auth";
+import type { AppUser } from "@/lib/auth";
 
-export function SiteHeader({ user }: { user: ChatGPTUser | null }) {
+export function SiteHeader({ user }: { user: AppUser | null }) {
   return (
     <header className="site-header">
       <div className="shell flex h-[76px] items-center justify-between gap-5">
@@ -28,9 +27,9 @@ export function SiteHeader({ user }: { user: ChatGPTUser | null }) {
               <span className="hidden sm:inline">My space</span>
             </Link>
           ) : (
-            <a href={chatGPTSignInPath("/dashboard")} target="_top" className="account-pill">
+            <Link href="/login?return_to=%2Fdashboard" className="account-pill">
               Sign in
-            </a>
+            </Link>
           )}
         </div>
       </div>

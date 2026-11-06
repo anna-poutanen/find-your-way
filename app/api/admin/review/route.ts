@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import { getChatGPTUser } from "@/app/chatgpt-auth";
+import { getCurrentUser, isSameOrigin } from "@/lib/auth";
 import { getDb } from "@/db";
 import { auditLogs, listingRevisions, listings, organizationMembers, organizations } from "@/db/schema";
 import { requireAdminProfile } from "@/lib/profile";
@@ -7,7 +7,8 @@ import { requireAdminProfile } from "@/lib/profile";
 function slugify(value: string) { return `${value.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}-${crypto.randomUUID().slice(0, 6)}`; }
 
 export async function POST(request: Request) {
-  const user = await getChatGPTUser(); if (!user) return Response.json({ error: "Sign in required" }, { status: 401 });
+  if (!isSameOrigin(request)) return Response.json({ error: "Invalid request origin." }, { status: 403 });
+  const user = await getCurrentUser(); if (!user) return Response.json({ error: "Sign in required" }, { status: 401 });
   try { await requireAdminProfile(user); } catch { return Response.json({ error: "Admin access required" }, { status: 403 }); }
   const { revisionId, action } = await request.json() as { revisionId?: string; action?: "approve" | "reject" | "changes_requested" };
   if (!revisionId || !action) return Response.json({ error: "Review action is incomplete." }, { status: 400 });
