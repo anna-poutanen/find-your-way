@@ -15,7 +15,6 @@ export default async function Home() {
     <main>
       <SiteHeader user={user} />
       <section className="hero-section">
-        <div className="hero-orbit orbit-one" /><div className="hero-orbit orbit-two" />
         <div className="shell hero-grid">
           <div className="hero-copy">
             <span className="hero-kicker"><span /> Youth-built · BC-wide</span>
@@ -27,17 +26,19 @@ export default async function Home() {
             </div>
             <div className="trust-row"><span><BadgeCheck size={16} /> Reviewed information</span><span><ShieldCheck size={16} /> Private messaging</span></div>
           </div>
-          <div className="hero-compass" aria-label="Ways to find support">
-            <div className="compass-card main-card">
-              <span className="compass-label">Start here</span><h2>What do you need tonight?</h2>
-              <div className="need-list">
-                <a href="#directory"><span className="need-icon coral"><HeartHandshake size={19} /></span><span><strong>A safe place to stay</strong><small>Emergency and youth shelters</small></span><ArrowRight size={17} /></a>
-                <a href="#directory"><span className="need-icon teal"><MapPinned size={19} /></span><span><strong>Longer-term housing</strong><small>Transition and supportive programs</small></span><ArrowRight size={17} /></a>
-                <a href="#directory"><span className="need-icon gold"><MessageCircleMore size={19} /></span><span><strong>Someone to talk to</strong><small>Community and crisis support</small></span><ArrowRight size={17} /></a>
-              </div>
+          <div className="hero-directory" aria-label="Ways to find support">
+            <div className="directory-meta"><span>Quick access</span><span>24/7 options are marked</span></div>
+            <h2>What do you need tonight?</h2>
+            <p className="directory-intro">Choose a starting point. You can refine results by location and eligibility in the directory.</p>
+            <nav className="directory-links" aria-label="Common support needs">
+              <a href="#directory"><HeartHandshake size={20} /><span><strong>A safe place to stay</strong><small>Emergency and youth shelters</small></span><ArrowRight size={17} /></a>
+              <a href="#directory"><MapPinned size={20} /><span><strong>Longer-term housing</strong><small>Transition and supportive programs</small></span><ArrowRight size={17} /></a>
+              <a href="#directory"><MessageCircleMore size={20} /><span><strong>Someone to talk to</strong><small>Community and crisis support</small></span><ArrowRight size={17} /></a>
+            </nav>
+            <div className="privacy-inline">
+              <ShieldCheck size={18} />
+              <span><strong>Anonymous messaging is available</strong><small>Your name and email can stay private.</small></span>
             </div>
-            <div className="floating-note note-one"><strong>Open now</strong><span>24/7 options are clearly marked</span></div>
-            <div className="floating-note note-two"><ShieldCheck size={18} /><span>Choose to stay anonymous</span></div>
           </div>
         </div>
       </section>
