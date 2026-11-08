@@ -506,6 +506,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .auth-card h1 { margin: 10px 0 12px; font-size: clamp(2.15rem,5vw,2.7rem); line-height: 1.04; letter-spacing: -.035em; }
 .auth-card > p { font-size: .92rem; line-height: 1.6; }
 .auth-card > label { gap: 8px; margin-top: 20px; }
+.auth-card > label + .primary-button { margin-top: 20px; }
 .auth-card input[type="email"],.auth-card input[type="password"],.auth-card input[name="displayName"] {
   min-height: 48px;
   border-radius: 10px;
