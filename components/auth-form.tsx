@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
 import { ArrowRight, LockKeyhole } from "lucide-react";
 
@@ -56,7 +55,7 @@ export function AuthForm({ mode, returnTo }: { mode: AuthMode; returnTo: string 
       {status && <p className="form-status error" role="alert">{status}</p>}
       <p className="auth-switch">
         {signup ? "Already have an account?" : "New to Find Your Way?"}{" "}
-        <Link href={`${signup ? "/login" : "/signup"}?return_to=${encodeURIComponent(returnTo)}`}>{signup ? "Sign in" : "Create an account"}</Link>
+        <a href={`${signup ? "/login" : "/signup"}?return_to=${encodeURIComponent(returnTo)}`}>{signup ? "Sign in" : "Create an account"}</a>
       </p>
       <p className="auth-privacy">Your Find Your Way account is independent of ChatGPT and is only used for this service.</p>
     </form>

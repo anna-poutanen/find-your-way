@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ArrowUpRight, Compass } from "lucide-react";
 
 export function SiteFooter() {
@@ -17,9 +16,9 @@ export function SiteFooter() {
         <div>
           <p className="footer-label">Explore</p>
           <div className="mt-4 grid gap-3 text-sm text-white/72">
-            <Link href="/#directory">Find support</Link>
-            <Link href="/shelter">Add an organization</Link>
-            <Link href="/about">About this project</Link>
+            <a href="/#directory">Find support</a>
+            <a href="/shelter">Add an organization</a>
+            <a href="/about">About this project</a>
           </div>
         </div>
         <div>

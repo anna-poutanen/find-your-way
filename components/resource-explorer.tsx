@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowUpRight, Clock3, Heart, MapPin, Search, SlidersHorizontal } from "lucide-react";
 import { categories, type Resource } from "@/lib/resource-data";
@@ -98,7 +97,7 @@ export function ResourceExplorer({ items, signedIn }: { items: Resource[]; signe
                   <Heart size={18} fill={favorites.has(resource.id) ? "currentColor" : "none"} />
                 </button>
               </div>
-              <h3><Link href={`/resources/${resource.slug}`}>{resource.name}</Link></h3>
+              <h3><a href={`/resources/${resource.slug}`}>{resource.name}</a></h3>
               <p className="resource-summary">{resource.summary}</p>
               <div className="resource-meta">
                 <span><MapPin size={15} /> {resource.city}</span>
@@ -107,7 +106,7 @@ export function ResourceExplorer({ items, signedIn }: { items: Resource[]; signe
               <div className="tag-list">
                 {resource.tags.slice(0, 3).map((tag) => <span key={tag}>{tag}</span>)}
               </div>
-              <Link className="card-link" href={`/resources/${resource.slug}`}>View details <ArrowUpRight size={16} /></Link>
+              <a className="card-link" href={`/resources/${resource.slug}`}>View details <ArrowUpRight size={16} /></a>
             </article>
           ))}
         </div>

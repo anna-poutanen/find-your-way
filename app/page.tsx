@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ArrowDown, ArrowRight, BadgeCheck, HeartHandshake, MapPinned, MessageCircleMore, ShieldCheck } from "lucide-react";
 import { getCurrentUser } from "@/lib/auth";
 import { ResourceExplorer } from "@/components/resource-explorer";
@@ -22,7 +21,7 @@ export default async function Home() {
             <p>Find shelters, housing programs and practical support across British Columbia—without having to know exactly what to ask for.</p>
             <div className="hero-actions">
               <a className="primary-button" href="#directory">Find support <ArrowDown size={17} /></a>
-              <Link className="secondary-button" href="/shelter">Add your organization <ArrowRight size={17} /></Link>
+              <a className="secondary-button" href="/shelter">Add your organization <ArrowRight size={17} /></a>
             </div>
             <div className="trust-row"><span><BadgeCheck size={16} /> Reviewed information</span><span><ShieldCheck size={16} /> Private messaging</span></div>
           </div>
@@ -44,7 +43,7 @@ export default async function Home() {
       </section>
       <section className="crisis-strip"><div className="shell crisis-inner"><span className="crisis-dot" /><strong>In immediate danger?</strong><span>Call <a href="tel:911">9-1-1</a></span><span>BC services <a href="tel:211">2-1-1</a></span><span>Suicide & crisis <a href="tel:988">9-8-8</a></span></div></section>
       <ResourceExplorer items={resources} signedIn={Boolean(user)} />
-      <section className="section-space pt-4"><div className="shell"><div className="how-panel"><div><span className="eyebrow light">Built around trust</span><h2>Information that improves instead of going stale.</h2><p>Shelters can claim and maintain their own profiles. Every public change stays in review until an administrator approves it.</p><Link href="/shelter" className="light-link">For shelters and organizations <ArrowRight size={16} /></Link></div><ol><li><span>01</span><div><strong>Organizations submit</strong><small>Add a new program or propose an update.</small></div></li><li><span>02</span><div><strong>Admins verify</strong><small>Sources and contact details are checked.</small></div></li><li><span>03</span><div><strong>People find support</strong><small>Search, save and message with confidence.</small></div></li></ol></div></div></section>
+      <section className="section-space pt-4"><div className="shell"><div className="how-panel"><div><span className="eyebrow light">Built around trust</span><h2>Information that improves instead of going stale.</h2><p>Shelters can claim and maintain their own profiles. Every public change stays in review until an administrator approves it.</p><a href="/shelter" className="light-link">For shelters and organizations <ArrowRight size={16} /></a></div><ol><li><span>01</span><div><strong>Organizations submit</strong><small>Add a new program or propose an update.</small></div></li><li><span>02</span><div><strong>Admins verify</strong><small>Sources and contact details are checked.</small></div></li><li><span>03</span><div><strong>People find support</strong><small>Search, save and message with confidence.</small></div></li></ol></div></div></section>
       <SiteFooter />
     </main>
   );
