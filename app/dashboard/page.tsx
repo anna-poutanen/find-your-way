@@ -25,9 +25,9 @@ export default async function DashboardPage() {
         <div className="shell dashboard-grid">
           <aside className="dashboard-nav">
             <a className="active" href="/dashboard"><Bookmark size={17} /> Overview</a>
-            <a href="/shelter"><Building2 size={17} /> Organization workspace</a>
+            {profile.role !== "user" && <a href="/shelter"><Building2 size={17} /> Organization workspace</a>}
             {profile.role === "admin" && <a href="/admin"><ShieldCheck size={17} /> Admin review</a>}
-            <button><Settings size={17} /> Settings</button>
+            <a href="/settings"><Settings size={17} /> Settings</a>
             <LogoutButton />
           </aside>
           <div className="dashboard-content">

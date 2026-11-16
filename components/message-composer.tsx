@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { LockKeyhole, Send } from "lucide-react";
 
-export function MessageComposer({ listingId, listingName, signedIn }: { listingId: string; listingName: string; signedIn: boolean }) {
+export function MessageComposer({ listingId, listingName, signedIn, anonymousByDefault = true }: { listingId: string; listingName: string; signedIn: boolean; anonymousByDefault?: boolean }) {
   const [body, setBody] = useState("");
-  const [anonymous, setAnonymous] = useState(true);
+  const [anonymous, setAnonymous] = useState(anonymousByDefault);
   const [status, setStatus] = useState("");
   const [sending, setSending] = useState(false);
 

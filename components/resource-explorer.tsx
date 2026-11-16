@@ -4,6 +4,10 @@ import { useEffect, useMemo, useState } from "react";
 import { ArrowUpRight, Clock3, Heart, MapPin, Search, SlidersHorizontal } from "lucide-react";
 import { categories, type Resource } from "@/lib/resource-data";
 
+function categorySlug(value: string) {
+  return value.toLowerCase().replaceAll(" ", "-").replace("'", "");
+}
+
 export function ResourceExplorer({ items, signedIn }: { items: Resource[]; signedIn: boolean }) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<(typeof categories)[number]>("All");
@@ -72,7 +76,7 @@ export function ResourceExplorer({ items, signedIn }: { items: Resource[]; signe
 
         <div className="category-row" aria-label="Resource categories">
           {categories.map((item) => (
-            <button key={item} onClick={() => setCategory(item)} className={category === item ? "category-chip active" : "category-chip"}>
+            <button key={item} onClick={() => setCategory(item)} className={`category-chip category-${categorySlug(item)}${category === item ? " active" : ""}`}>
               {item}
             </button>
           ))}
@@ -85,9 +89,9 @@ export function ResourceExplorer({ items, signedIn }: { items: Resource[]; signe
 
         <div className="resource-grid">
           {filtered.map((resource) => (
-            <article key={resource.id} className="resource-card">
+            <article key={resource.id} className={`resource-card category-${categorySlug(resource.category)}`}>
               <div className="flex items-start justify-between gap-4">
-                <span className={`resource-type type-${resource.category.toLowerCase().replaceAll(" ", "-").replace("'", "")}`}>{resource.category}</span>
+                <span className={`resource-type type-${categorySlug(resource.category)}`}>{resource.category}</span>
                 <button
                   type="button"
                   onClick={() => toggleFavorite(resource.id)}

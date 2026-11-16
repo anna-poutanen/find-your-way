@@ -26,3 +26,9 @@ export async function requireAdminProfile(user: AppUser) {
   if (profile.role !== "admin") throw new Error("Admin access is required.");
   return profile;
 }
+
+export async function requireShelterProfile(user: AppUser) {
+  const profile = await ensureProfile(user);
+  if (profile.role !== "shelter" && profile.role !== "admin") throw new Error("Shelter access is required.");
+  return profile;
+}

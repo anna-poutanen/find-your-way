@@ -402,7 +402,28 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
   border-radius: 16px;
   padding: 24px;
 }
+.category-emergency-shelter { --category-color: #f07ab6; --category-soft: rgba(240,122,182,.12); --category-line: rgba(240,122,182,.42); }
+.category-youth-housing { --category-color: #aaa1ff; --category-soft: rgba(170,161,255,.12); --category-line: rgba(170,161,255,.42); }
+.category-womens-housing { --category-color: #ff9b82; --category-soft: rgba(255,155,130,.12); --category-line: rgba(255,155,130,.42); }
+.category-community-support { --category-color: #7bd6b0; --category-soft: rgba(123,214,176,.12); --category-line: rgba(123,214,176,.42); }
+.category-chip[class*="category-"]:not(.category-all) { border-color: var(--category-line); background: var(--category-soft); color: var(--category-color); }
+.category-chip[class*="category-"].active { border-color: var(--category-color); background: var(--category-color); color: #090909; }
+.resource-card[class*="category-"] { border-top-color: var(--category-line); }
+.resource-card[class*="category-"]:hover { border-color: var(--category-line); }
+.resource-card[class*="category-"] .resource-type { background: var(--category-soft); color: var(--category-color); }
+.type-emergency-shelter { background: rgba(240,122,182,.12); color: #f07ab6; }
+.type-youth-housing { background: rgba(170,161,255,.12); color: #aaa1ff; }
+.type-womens-housing { background: rgba(255,155,130,.12); color: #ff9b82; }
+.type-community-support { background: rgba(123,214,176,.12); color: #7bd6b0; }
+.resource-card[class*="category-"] .save-button:hover,
+.resource-card[class*="category-"] .save-button.saved { border-color: var(--category-color); background: var(--category-soft); color: var(--category-color); }
+.resource-card[class*="category-"] .card-link:hover { color: var(--category-color); }
 .resource-type { font-size: .68rem; font-weight: 700; letter-spacing: .055em; }
+.settings-shell { max-width: 780px; }
+.settings-eyebrow { display: block; margin-top: 28px; }
+.settings-card { width: 100%; }
+.settings-card input[readonly] { color: var(--muted-foreground); cursor: not-allowed; }
+.settings-anonymous { margin-top: 24px; }
 .resource-card h3 { margin: 20px 0 10px; font-size: 1.55rem; line-height: 1.12; }
 .resource-summary { min-height: 0; color: var(--muted-foreground); font-size: .88rem; line-height: 1.62; }
 .resource-meta { margin-top: 18px; }

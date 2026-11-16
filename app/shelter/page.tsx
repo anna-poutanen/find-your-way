@@ -1,4 +1,5 @@
 import { Building2, CheckCircle2, MessageCircle, Users } from "lucide-react";
+import { redirect } from "next/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { SubmissionForm } from "@/components/submission-form";
 import { requireCurrentUser } from "@/lib/auth";
@@ -8,7 +9,8 @@ export const dynamic = "force-dynamic";
 
 export default async function ShelterPage() {
   const user = await requireCurrentUser("/shelter");
-  await ensureProfile(user);
+  const profile = await ensureProfile(user);
+  if (profile.role === "user") redirect("/dashboard");
   return (
     <main>
       <SiteHeader user={user} />
