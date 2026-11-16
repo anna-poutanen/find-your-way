@@ -16,7 +16,7 @@ export const authAccounts = sqliteTable("auth_accounts", {
   email: text("email").notNull().unique(),
   passwordHash: text("password_hash").notNull(),
   passwordSalt: text("password_salt").notNull(),
-  hashIterations: integer("hash_iterations").notNull().default(310000),
+  hashIterations: integer("hash_iterations").notNull().default(100000),
   createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });

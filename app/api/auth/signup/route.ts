@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { getDb } from "@/db";
 import { authAccounts, profiles } from "@/db/schema";
-import { createSalt, createSession, isSameOrigin, normalizeEmail, passwordDigest, safeReturnPath, setSessionCookie, validPassword } from "@/lib/auth";
+import { createSalt, createSession, isSameOrigin, normalizeEmail, PASSWORD_ITERATIONS, passwordDigest, safeReturnPath, setSessionCookie, validPassword } from "@/lib/auth";
 
 export async function POST(request: Request) {
   if (!isSameOrigin(request)) return NextResponse.json({ error: "Invalid request origin." }, { status: 403 });
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
   } else {
     await db.insert(profiles).values({ userId, email, displayName, role });
   }
-  await db.insert(authAccounts).values({ userId, email, passwordHash, passwordSalt: salt });
+  await db.insert(authAccounts).values({ userId, email, passwordHash, passwordSalt: salt, hashIterations: PASSWORD_ITERATIONS });
   const token = await createSession(userId);
   const response = NextResponse.json({ ok: true, redirectTo: safeReturnPath(input.returnTo) });
   setSessionCookie(response, token);

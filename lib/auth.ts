@@ -17,7 +17,9 @@ export type AppUser = {
 
 export const SESSION_COOKIE = "fyw_session";
 export const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 30;
-export const PASSWORD_ITERATIONS = 310000;
+// The Sites Cloudflare runtime currently caps PBKDF2 at 100,000 iterations.
+// Persist this value with every account so login always uses the same cost.
+export const PASSWORD_ITERATIONS = 100000;
 
 export async function getCurrentUser(): Promise<AppUser | null> {
   const token = (await cookies()).get(SESSION_COOKIE)?.value;
