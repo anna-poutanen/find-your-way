@@ -9,8 +9,8 @@ export const metadata: Metadata = {
   description:
     "Find shelters, housing programs, and support services across British Columbia.",
   icons: {
-    icon: "/favicon.svg?v=pink",
-    shortcut: "/favicon.svg?v=pink",
+    icon: "/favicon.svg?v=compass",
+    shortcut: "/favicon.svg?v=compass",
   },
 };
 
