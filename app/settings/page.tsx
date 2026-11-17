@@ -12,8 +12,7 @@ export default async function SettingsPage() {
   return (
     <main>
       <SiteHeader user={user} />
-      <section className="dashboard-hero"><div className="shell"><a className="back-link" href="/dashboard"><ArrowLeft size={16} /> Back to dashboard</a><span className="eyebrow settings-eyebrow">Settings</span><h1>Make your account work for you.</h1><p>Manage your profile and default privacy preference.</p></div></section>
-      <section className="section-space pt-8"><div className="shell settings-shell"><SettingsForm displayName={profile.displayName} email={profile.email} role={profile.role} anonymousByDefault={profile.anonymousByDefault} /></div></section>
+      <section className="settings-page"><div className="shell settings-shell"><a className="back-link" href="/dashboard"><ArrowLeft size={16} /> Back to dashboard</a><header className="settings-page-heading"><h1>Settings</h1><p>Manage your profile and privacy preferences.</p></header><SettingsForm displayName={profile.displayName} email={profile.email} role={profile.role} anonymousByDefault={profile.anonymousByDefault} /></div></section>
     </main>
   );
 }

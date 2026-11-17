@@ -1,18 +1,20 @@
 import { desc, eq } from "drizzle-orm";
 import { Database, FileCheck2, ShieldCheck } from "lucide-react";
+import { redirect } from "next/navigation";
 import { ImportPanel } from "@/components/import-panel";
 import { ReviewActions } from "@/components/review-actions";
 import { SiteHeader } from "@/components/site-header";
 import { getDb } from "@/db";
 import { importJobs, listingRevisions } from "@/db/schema";
 import { requireCurrentUser } from "@/lib/auth";
-import { requireAdminProfile } from "@/lib/profile";
+import { ensureProfile } from "@/lib/profile";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
   const user = await requireCurrentUser("/admin");
-  await requireAdminProfile(user);
+  const profile = await ensureProfile(user);
+  if (profile.role !== "admin") redirect("/dashboard");
   const db = getDb();
   const revisions = await db.select().from(listingRevisions).where(eq(listingRevisions.status, "pending")).orderBy(desc(listingRevisions.createdAt)).limit(20);
   const jobs = await db.select().from(importJobs).orderBy(desc(importJobs.createdAt)).limit(8);

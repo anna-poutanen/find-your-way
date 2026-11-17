@@ -1,5 +1,6 @@
 import { desc, eq } from "drizzle-orm";
 import { Bookmark, Building2, ChevronRight, MessageCircle, Settings, ShieldCheck } from "lucide-react";
+import Link from "next/link";
 import { LogoutButton } from "@/components/logout-button";
 import { SiteHeader } from "@/components/site-header";
 import { getDb } from "@/db";
@@ -32,7 +33,7 @@ export default async function DashboardPage() {
           </aside>
           <div className="dashboard-content">
             <div className="metric-grid"><div><Bookmark size={18} /><strong>{saved.length}</strong><span>Saved resources</span></div><div><MessageCircle size={18} /><strong>{threads.length}</strong><span>Conversations</span></div><div><Building2 size={18} /><strong>{profile.role === "user" ? "—" : "1"}</strong><span>Organizations</span></div></div>
-            <section className="dashboard-section"><div className="dashboard-section-heading"><div><span className="eyebrow">Saved</span><h2>Your resources</h2></div><a href="/#directory">Browse more</a></div>{saved.length ? <div className="saved-list">{saved.map((item) => <a key={item.id} href={`/resources/${item.slug}`}><div><strong>{item.name}</strong><span>{item.category} · {item.city}</span></div><ChevronRight size={17} /></a>)}</div> : <div className="soft-empty"><Bookmark size={21} /><div><strong>No saved resources yet</strong><p>Use the heart button in the directory to keep useful options close.</p></div></div>}</section>
+            <section className="dashboard-section"><div className="dashboard-section-heading"><div><span className="eyebrow">Saved</span><h2>Your resources</h2></div><Link href="/#directory" prefetch={false}>Browse more</Link></div>{saved.length ? <div className="saved-list">{saved.map((item) => <Link key={item.id} href={`/resources/${item.slug}`} prefetch={false}><div><strong>{item.name}</strong><span>{item.category} · {item.city}</span></div><ChevronRight size={17} /></Link>)}</div> : <div className="soft-empty"><Bookmark size={21} /><div><strong>No saved resources yet</strong><p>Use the heart button in the directory to keep useful options close.</p></div></div>}</section>
             <section className="dashboard-section"><div className="dashboard-section-heading"><div><span className="eyebrow">Messages</span><h2>Recent conversations</h2></div></div>{threads.length ? <div className="saved-list">{threads.map((thread) => <div className="conversation-row" key={thread.id}><div><strong>{thread.listingName}</strong><span>{thread.anonymous ? "Anonymous conversation" : "Named conversation"} · {thread.status}</span></div><span className="status-pill">{thread.channel.replace("_", " ")}</span></div>)}</div> : <div className="soft-empty"><MessageCircle size={21} /><div><strong>No conversations yet</strong><p>You can contact an organization privately from any resource page.</p></div></div>}</section>
           </div>
         </div>

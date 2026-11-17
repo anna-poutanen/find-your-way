@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { LockKeyhole, Send } from "lucide-react";
 
 export function MessageComposer({ listingId, listingName, signedIn, anonymousByDefault = true }: { listingId: string; listingName: string; signedIn: boolean; anonymousByDefault?: boolean }) {
+  const router = useRouter();
   const [body, setBody] = useState("");
   const [anonymous, setAnonymous] = useState(anonymousByDefault);
   const [status, setStatus] = useState("");
@@ -12,7 +14,7 @@ export function MessageComposer({ listingId, listingName, signedIn, anonymousByD
   async function submit(event: React.FormEvent) {
     event.preventDefault();
     if (!signedIn) {
-      window.location.href = `/login?return_to=${encodeURIComponent(window.location.pathname)}`;
+      router.push(`/login?return_to=${encodeURIComponent(window.location.pathname)}`);
       return;
     }
     setSending(true);

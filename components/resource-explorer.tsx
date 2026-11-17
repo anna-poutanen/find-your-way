@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { ArrowUpRight, Clock3, Heart, MapPin, Search, SlidersHorizontal } from "lucide-react";
 import { categories, type Resource } from "@/lib/resource-data";
 
@@ -9,8 +10,12 @@ function categorySlug(value: string) {
 }
 
 export function ResourceExplorer({ items, signedIn }: { items: Resource[]; signedIn: boolean }) {
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<(typeof categories)[number]>("All");
+  const [showFilters, setShowFilters] = useState(false);
+  const [city, setCity] = useState("All");
+  const [open24Hours, setOpen24Hours] = useState(false);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [notice, setNotice] = useState("");
 
@@ -26,14 +31,18 @@ export function ResourceExplorer({ items, signedIn }: { items: Resource[]; signe
     const normalized = query.trim().toLowerCase();
     return items.filter((item) => {
       const matchesCategory = category === "All" || item.category === category;
+      const matchesCity = city === "All" || item.city === city;
+      const matchesHours = !open24Hours || item.hours.toLowerCase().includes("24/7");
       const haystack = [item.name, item.city, item.summary, item.address, ...item.tags].join(" ").toLowerCase();
-      return matchesCategory && (!normalized || haystack.includes(normalized));
+      return matchesCategory && matchesCity && matchesHours && (!normalized || haystack.includes(normalized));
     });
-  }, [category, items, query]);
+  }, [category, city, items, open24Hours, query]);
+
+  const cities = useMemo(() => ["All", ...Array.from(new Set(items.map((item) => item.city))).sort()], [items]);
 
   async function toggleFavorite(id: string) {
     if (!signedIn) {
-      window.location.href = "/login?return_to=%2F%23directory";
+      router.push("/login?return_to=%2F%23directory");
       return;
     }
     const isFavorite = favorites.has(id);
@@ -71,8 +80,14 @@ export function ResourceExplorer({ items, signedIn }: { items: Resource[]; signe
             <span className="sr-only">Search resources</span>
             <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search by name, city or service" />
           </label>
-          <button className="filter-button" type="button"><SlidersHorizontal size={17} /> More filters</button>
+          <button className="filter-button" type="button" aria-expanded={showFilters} aria-controls="advanced-filters" onClick={() => setShowFilters((current) => !current)}><SlidersHorizontal size={17} /> {showFilters ? "Hide filters" : "More filters"}</button>
         </div>
+
+        {showFilters && <div className="advanced-filters" id="advanced-filters">
+          <label><span>Location</span><select value={city} onChange={(event) => setCity(event.target.value)}>{cities.map((item) => <option key={item} value={item}>{item === "All" ? "All locations" : item}</option>)}</select></label>
+          <label className="filter-check"><input type="checkbox" checked={open24Hours} onChange={(event) => setOpen24Hours(event.target.checked)} /><span>Show only services marked open 24/7</span></label>
+          {(city !== "All" || open24Hours) && <button type="button" className="text-button" onClick={() => { setCity("All"); setOpen24Hours(false); }}>Clear filters</button>}
+        </div>}
 
         <div className="category-row" aria-label="Resource categories">
           {categories.map((item) => (
@@ -120,7 +135,7 @@ export function ResourceExplorer({ items, signedIn }: { items: Resource[]; signe
             <Search size={24} />
             <h3>No exact matches</h3>
             <p>Try a nearby city, a broader service, or reset the category.</p>
-            <button onClick={() => { setQuery(""); setCategory("All"); }} className="text-button">Reset search</button>
+            <button onClick={() => { setQuery(""); setCategory("All"); setCity("All"); setOpen24Hours(false); }} className="text-button">Reset search</button>
           </div>
         )}
       </div>

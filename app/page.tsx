@@ -16,7 +16,7 @@ export default async function Home() {
       <section className="hero-section">
         <div className="shell hero-grid">
           <div className="hero-copy">
-            <span className="hero-kicker"><span /> Youth-built · BC-wide</span>
+            <span className="hero-kicker">Youth-built in British Columbia</span>
             <h1>A clearer path to <em>somewhere safe.</em></h1>
             <p>Find shelters, housing programs and practical support across British Columbia—without having to know exactly what to ask for.</p>
             <div className="hero-actions">
