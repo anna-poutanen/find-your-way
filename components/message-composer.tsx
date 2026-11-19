@@ -22,12 +22,19 @@ export function MessageComposer({ listingId, listingName, signedIn, anonymousByD
     const response = await fetch("/api/messages", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ listingId, listingName, body, anonymous }),
+      body: JSON.stringify({ listingId, body, anonymous }),
     });
     setSending(false);
     if (response.ok) {
       setBody("");
-      setStatus("Your message has been added to a private conversation.");
+      const result = await response.json().catch(() => ({}));
+      setStatus(result.emailStatus === "sent"
+        ? "Your message was sent in the app and by email."
+        : result.emailStatus === "configuration_required"
+          ? "Your message was sent in the app. Email notifications are not configured yet."
+          : result.emailStatus === "failed"
+            ? "Your message was sent in the app, but the email notification failed."
+            : "Your message was sent in the app.");
     } else {
       const result = await response.json().catch(() => ({}));
       setStatus(result.error ?? "We couldn't send your message. Please try again.");

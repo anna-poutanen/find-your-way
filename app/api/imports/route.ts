@@ -2,22 +2,11 @@ import { env } from "cloudflare:workers";
 import { getCurrentUser, isSameOrigin } from "@/lib/auth";
 import { getDb } from "@/db";
 import { importJobs } from "@/db/schema";
+import { listingRevisions } from "@/db/schema";
+import { parseImportFile } from "@/lib/import-parsers";
 import { requireAdminProfile } from "@/lib/profile";
 
 const allowedExtensions = new Set(["csv", "xlsx", "xls", "pdf"]);
-
-function parseCsv(text: string) {
-  const rows: string[][] = []; let row: string[] = []; let cell = ""; let quoted = false;
-  for (let index = 0; index < text.length; index += 1) {
-    const char = text[index]; const next = text[index + 1];
-    if (char === '"' && quoted && next === '"') { cell += '"'; index += 1; }
-    else if (char === '"') quoted = !quoted;
-    else if (char === "," && !quoted) { row.push(cell.trim()); cell = ""; }
-    else if ((char === "\n" || char === "\r") && !quoted) { if (char === "\r" && next === "\n") index += 1; row.push(cell.trim()); if (row.some(Boolean)) rows.push(row); row = []; cell = ""; }
-    else cell += char;
-  }
-  row.push(cell.trim()); if (row.some(Boolean)) rows.push(row); return rows;
-}
 
 export async function POST(request: Request) {
   if (!isSameOrigin(request)) return Response.json({ error: "Invalid request origin." }, { status: 403 });
@@ -30,9 +19,15 @@ export async function POST(request: Request) {
   if (!allowedExtensions.has(extension)) return Response.json({ error: "Use a CSV, XLSX, XLS or PDF file." }, { status: 400 });
   const bytes = await file.arrayBuffer(); const id = crypto.randomUUID(); const objectKey = `imports/${id}/${file.name.replace(/[^a-zA-Z0-9._-]/g, "-")}`;
   if (env.BUCKET) await env.BUCKET.put(objectKey, bytes, { httpMetadata: { contentType: file.type || "application/octet-stream" } });
-  let preview: string[][] = []; let detectedRows = 0;
-  if (extension === "csv") { preview = parseCsv(new TextDecoder().decode(bytes)); detectedRows = Math.max(0, preview.length - 1); }
-  const status = extension === "csv" ? "needs_review" : "uploaded";
-  await getDb().insert(importJobs).values({ id, uploadedBy: user.userId, fileName: file.name, fileType: extension, objectKey, status, detectedRows, previewJson: JSON.stringify(preview.slice(0, 10)) });
-  return Response.json({ job: { id, fileName: file.name, status, detectedRows, preview: preview.slice(0, 6) } });
+  try {
+    const parsed = await parseImportFile(bytes, extension, file.name); const detectedRows = parsed.candidates.length; const status = detectedRows ? "needs_review" : "failed";
+    const db = getDb();
+    await db.insert(importJobs).values({ id, uploadedBy: user.userId, fileName: file.name, fileType: extension, objectKey, status, detectedRows, previewJson: JSON.stringify(parsed.rows.slice(0, 10)), errorMessage: detectedRows ? null : "No structured shelter records could be detected." });
+    for (const candidate of parsed.candidates) await db.insert(listingRevisions).values({ id: crypto.randomUUID(), submittedBy: user.userId, payloadJson: JSON.stringify(candidate), status: "pending" });
+    return Response.json({ job: { id, fileName: file.name, status, detectedRows, preview: parsed.rows.slice(0, 6), candidateCount: detectedRows } });
+  } catch (error) {
+    const message = error instanceof Error ? error.message.slice(0, 500) : "The file could not be extracted.";
+    await getDb().insert(importJobs).values({ id, uploadedBy: user.userId, fileName: file.name, fileType: extension, objectKey, status: "failed", detectedRows: 0, errorMessage: message });
+    return Response.json({ error: `The file was uploaded, but extraction failed: ${message}` }, { status: 422 });
+  }
 }

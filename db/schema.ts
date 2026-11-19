@@ -53,6 +53,45 @@ export const organizationMembers = sqliteTable(
   (table) => [primaryKey({ columns: [table.organizationId, table.userId] }), index("organization_members_user_idx").on(table.userId)],
 );
 
+export const organizationInvitations = sqliteTable(
+  "organization_invitations",
+  {
+    id: text("id").primaryKey(),
+    organizationId: text("organization_id").notNull(),
+    email: text("email").notNull(),
+    invitedBy: text("invited_by").notNull(),
+    status: text("status", { enum: ["pending", "accepted", "cancelled"] }).notNull().default("pending"),
+    createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+    acceptedAt: text("accepted_at"),
+  },
+  (table) => [index("organization_invitations_email_idx").on(table.email, table.status), index("organization_invitations_org_idx").on(table.organizationId)],
+);
+
+export const organizationClaims = sqliteTable(
+  "organization_claims",
+  {
+    id: text("id").primaryKey(),
+    listingId: text("listing_id").notNull(),
+    listingName: text("listing_name").notNull(),
+    submittedBy: text("submitted_by").notNull(),
+    workEmail: text("work_email").notNull(),
+    roleTitle: text("role_title").notNull(),
+    note: text("note"),
+    status: text("status", { enum: ["pending", "approved", "changes_requested", "rejected"] }).notNull().default("pending"),
+    organizationId: text("organization_id"),
+    reviewerId: text("reviewer_id"),
+    reviewedAt: text("reviewed_at"),
+    createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => [index("organization_claims_status_idx").on(table.status), index("organization_claims_listing_idx").on(table.listingId)],
+);
+
+export const listingOwnership = sqliteTable("listing_ownership", {
+  listingId: text("listing_id").primaryKey(),
+  organizationId: text("organization_id").notNull(),
+  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});
+
 export const listings = sqliteTable(
   "listings",
   {
@@ -118,6 +157,7 @@ export const conversations = sqliteTable(
     listingName: text("listing_name").notNull(),
     userId: text("user_id").notNull(),
     organizationId: text("organization_id"),
+    contactEmail: text("contact_email"),
     anonymous: integer("anonymous", { mode: "boolean" }).notNull().default(true),
     channel: text("channel", { enum: ["in_app", "email_relay", "both"] }).notNull().default("email_relay"),
     relayToken: text("relay_token").notNull().unique(),
@@ -126,6 +166,24 @@ export const conversations = sqliteTable(
     createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
   },
   (table) => [index("conversations_user_idx").on(table.userId), index("conversations_org_idx").on(table.organizationId)],
+);
+
+export const emailDeliveries = sqliteTable(
+  "email_deliveries",
+  {
+    id: text("id").primaryKey(),
+    messageId: text("message_id").notNull(),
+    toEmail: text("to_email").notNull(),
+    subject: text("subject").notNull(),
+    textBody: text("text_body").notNull(),
+    status: text("status", { enum: ["pending", "sent", "configuration_required", "failed"] }).notNull().default("pending"),
+    providerMessageId: text("provider_message_id"),
+    lastError: text("last_error"),
+    attempts: integer("attempts").notNull().default(0),
+    createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => [index("email_deliveries_status_idx").on(table.status), index("email_deliveries_message_idx").on(table.messageId)],
 );
 
 export const messages = sqliteTable(

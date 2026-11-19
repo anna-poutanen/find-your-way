@@ -15,6 +15,13 @@
       "when": 1793987744817,
       "tag": "0001_smooth_morlocks",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1795106375391,
+      "tag": "0002_stiff_blazing_skull",
+      "breakpoints": true
     }
   ]
 }

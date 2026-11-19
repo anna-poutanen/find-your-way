@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
-import { Compass, UserRound } from "lucide-react";
+import { Compass, Menu, UserRound } from "lucide-react";
 import type { AppUser } from "@/lib/auth";
 
 export function SiteHeader({ user }: { user: AppUser | null }) {
@@ -19,6 +19,15 @@ export function SiteHeader({ user }: { user: AppUser | null }) {
           <a className="nav-link" href="/about">About</a>
           <a className="nav-link" href="/shelter">For organizations</a>
         </nav>
+
+        <details className="mobile-nav md:hidden">
+          <summary aria-label="Open main menu"><Menu size={19} /><span className="sr-only">Menu</span></summary>
+          <nav aria-label="Mobile navigation">
+            <a href="/#directory">Find support</a>
+            <a href="/about">About</a>
+            <a href="/shelter">For organizations</a>
+          </nav>
+        </details>
 
         <div className="flex items-center gap-2">
           {user ? (

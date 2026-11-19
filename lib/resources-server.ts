@@ -2,7 +2,7 @@ import "server-only";
 
 import { eq } from "drizzle-orm";
 import { getDb } from "@/db";
-import { listings } from "@/db/schema";
+import { listingOwnership, listings } from "@/db/schema";
 import { getResource, resources, type Resource, type ResourceCategory } from "@/lib/resource-data";
 
 function toResource(row: typeof listings.$inferSelect): Resource {
@@ -37,4 +37,18 @@ export async function getResourceBySlug(slug: string) {
   const seeded = getResource(slug); if (seeded) return seeded;
   const row = await getDb().select().from(listings).where(eq(listings.slug, slug)).get();
   return row?.status === "published" ? toResource(row) : undefined;
+}
+
+export async function getResourceById(id: string) {
+  const seeded = resources.find((resource) => resource.id === id);
+  if (seeded) return seeded;
+  const row = await getDb().select().from(listings).where(eq(listings.id, id)).get();
+  return row?.status === "published" ? toResource(row) : undefined;
+}
+
+export async function getOrganizationIdForListing(id: string) {
+  const ownership = await getDb().select().from(listingOwnership).where(eq(listingOwnership.listingId, id)).get();
+  if (ownership) return ownership.organizationId;
+  const listing = await getDb().select({ organizationId: listings.organizationId }).from(listings).where(eq(listings.id, id)).get();
+  return listing?.organizationId ?? null;
 }

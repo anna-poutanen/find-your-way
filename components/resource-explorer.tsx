@@ -97,14 +97,14 @@ export function ResourceExplorer({ items, signedIn, initialCategory, initialQuer
 
         <div className="category-row" aria-label="Resource categories">
           {categories.map((item) => (
-            <button key={item} onClick={() => setCategory(item)} className={`category-chip category-${categorySlug(item)}${category === item ? " active" : ""}`}>
+            <button type="button" key={item} aria-pressed={category === item} onClick={() => setCategory(item)} className={`category-chip category-${categorySlug(item)}${category === item ? " active" : ""}`}>
               {item}
             </button>
           ))}
         </div>
 
         <div className="mb-5 flex items-end justify-between gap-4">
-          <p className="text-sm font-medium text-[var(--muted-foreground)]">{filtered.length} resources shown</p>
+          <p className="text-sm font-medium text-[var(--muted-foreground)]">{filtered.length} {filtered.length === 1 ? "resource" : "resources"} shown</p>
           {notice && <p role="status" className="text-sm text-[var(--forest)]">{notice}</p>}
         </div>
 
@@ -141,7 +141,7 @@ export function ResourceExplorer({ items, signedIn, initialCategory, initialQuer
             <Search size={24} />
             <h3>No exact matches</h3>
             <p>Try a nearby city, a broader service, or reset the category.</p>
-            <button onClick={() => { setQuery(""); setCategory("All"); setCity("All"); setOpen24Hours(false); }} className="text-button">Reset search</button>
+            <button type="button" onClick={() => { setQuery(""); setCategory("All"); setCity("All"); setOpen24Hours(false); }} className="text-button">Reset search</button>
           </div>
         )}
       </div>
