@@ -9,10 +9,10 @@ function categorySlug(value: string) {
   return value.toLowerCase().replaceAll(" ", "-").replace("'", "");
 }
 
-export function ResourceExplorer({ items, signedIn }: { items: Resource[]; signedIn: boolean }) {
+export function ResourceExplorer({ items, signedIn, initialCategory, initialQuery }: { items: Resource[]; signedIn: boolean; initialCategory?: string; initialQuery?: string }) {
   const router = useRouter();
-  const [query, setQuery] = useState("");
-  const [category, setCategory] = useState<(typeof categories)[number]>("All");
+  const [query, setQuery] = useState(initialQuery?.slice(0, 100) ?? "");
+  const [category, setCategory] = useState<(typeof categories)[number]>(() => categories.includes(initialCategory as (typeof categories)[number]) ? initialCategory as (typeof categories)[number] : "All");
   const [showFilters, setShowFilters] = useState(false);
   const [city, setCity] = useState("All");
   const [open24Hours, setOpen24Hours] = useState(false);
@@ -26,6 +26,12 @@ export function ResourceExplorer({ items, signedIn }: { items: Resource[]; signe
       .then((data) => setFavorites(new Set(data.favorites ?? [])))
       .catch(() => undefined);
   }, [signedIn]);
+
+  useEffect(() => {
+    if (!initialCategory && !initialQuery) return;
+    const frame = window.requestAnimationFrame(() => document.getElementById("directory")?.scrollIntoView());
+    return () => window.cancelAnimationFrame(frame);
+  }, [initialCategory, initialQuery]);
 
   const filtered = useMemo(() => {
     const normalized = query.trim().toLowerCase();

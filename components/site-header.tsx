@@ -1,35 +1,35 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 import { Compass, UserRound } from "lucide-react";
-import Link from "next/link";
 import type { AppUser } from "@/lib/auth";
 
 export function SiteHeader({ user }: { user: AppUser | null }) {
   return (
     <header className="site-header">
       <div className="shell flex h-[76px] items-center justify-between gap-5">
-        <Link href="/" prefetch={false} className="brand" aria-label="Find Your Way home">
+        <a href="/" className="brand" aria-label="Find Your Way home">
           <span className="brand-mark"><Compass size={21} strokeWidth={2.2} /></span>
           <span>
             <strong>Find Your Way</strong>
             <small>by Hearts Against Homelessness</small>
           </span>
-        </Link>
+        </a>
 
         <nav className="hidden items-center gap-1 md:flex" aria-label="Main navigation">
-          <Link className="nav-link" href="/#directory" prefetch={false}>Find support</Link>
-          <Link className="nav-link" href="/about" prefetch={false}>About</Link>
-          <Link className="nav-link" href="/shelter" prefetch={false}>For organizations</Link>
+          <a className="nav-link" href="/#directory">Find support</a>
+          <a className="nav-link" href="/about">About</a>
+          <a className="nav-link" href="/shelter">For organizations</a>
         </nav>
 
         <div className="flex items-center gap-2">
           {user ? (
-            <Link href="/dashboard" prefetch={false} className="account-pill">
+            <a href="/dashboard" className="account-pill">
               <span className="account-avatar"><UserRound size={15} /></span>
               <span className="hidden sm:inline">My space</span>
-            </Link>
+            </a>
           ) : (
-            <Link href="/login?return_to=%2Fdashboard" prefetch={false} className="account-pill">
+            <a href="/login?return_to=%2Fdashboard" className="account-pill">
               Sign in
-            </Link>
+            </a>
           )}
         </div>
       </div>
